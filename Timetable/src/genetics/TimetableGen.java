@@ -25,7 +25,7 @@ public class TimetableGen extends Genotype<Integer> {
 		if (count != secondParent.hourCount || count < 0)
 			throw new InvalidParameterException("Invalid hourCount");
 	}
-
+//sanckank
 	@Override
 	protected ArrayList<Integer> createRandomChromosome(int chromosomeSize) {
 
