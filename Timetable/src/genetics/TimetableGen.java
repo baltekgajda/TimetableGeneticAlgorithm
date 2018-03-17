@@ -30,6 +30,12 @@ public class TimetableGen extends Genotype<Integer> {
 		int count = firstParent.hourCount;
 		if (count != secondParent.hourCount || count < 0)
 			throw new InvalidParameterException("Invalid hourCount");
+		this.hourCount = count;
+		
+		ArrayList<Integer> chrom = crossover(firstParent.chromosome, secondParent.chromosome);
+		chrom = mutateChromosome(chrom, mutationRate);
+		if (!isValid(chrom))
+			this.chromosome = repairChromosome(chrom);
 	}
 
 	@Override
@@ -59,23 +65,23 @@ public class TimetableGen extends Genotype<Integer> {
 	@Override
 	protected ArrayList<Integer> crossover(ArrayList<Integer> firstParent, ArrayList<Integer> secondParent) {
 		// TODO Auto-generated method stub
-		return null;
+		return chromosome;
 	}
 
 	@Override
 	protected ArrayList<Integer> mutateChromosome(ArrayList<Integer> chromosome, double mutationRate) {
 		// TODO Auto-generated method stub
-		return null;
+		return chromosome;
 	}
 
 	@Override
 	public String toString() {
 		String string = new String("[");
-		for (int i = 0; i < chromosome.size() - 1; i++) {
-			string += chromosome.get(i);
+		for (int i = 0; i < this.chromosome.size() - 1; i++) {
+			string += this.chromosome.get(i);
 			string += ", ";
 		}
-		string = string + chromosome.get(chromosome.size() - 1) + "]";
+		string = string + this.chromosome.get(this.chromosome.size() - 1) + "]";
 		return string;
 	}
 

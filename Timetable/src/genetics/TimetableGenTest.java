@@ -15,7 +15,7 @@ public class TimetableGenTest {
 	private TimetableGen gen;
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		gen = new TimetableGen(5, 3);
 	}
 
@@ -44,10 +44,89 @@ public class TimetableGenTest {
 	}
 
 	@Test
-	void randomCreatedChromosomeShouldHaveProperArrayList() {
+	public void randomCreatedChromosomeShouldHaveProperArrayList() {
 		assertNotNull(gen.getChromosome());
 		Collections.sort(gen.getChromosome());
 		assertEquals(new ArrayList<Integer>(Arrays.asList(0, 0, 1, 2, 3)), gen.getChromosome());
 	}
 
+	@Test
+	public void secondConstructorParametersShouldNotBeNull() {
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(null, gen, 0.5);
+		});
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(gen, null, 0.5);
+		});
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(null, null, 0.5);
+			;
+		});
+	}
+
+	@Test
+	public void secondConstructorParametersChromosomesShouldBeNotNull() {
+		TimetableGen gen1 = new TimetableGen(5, 3);
+		gen.setChromosome(null);
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(gen, gen1, 0.5);
+		});
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(gen1, gen, 0.5);
+		});
+	}
+
+	@Test
+	public void secondConstructorParametersChromosomesSizeShouldNotBeZero() {
+		TimetableGen gen1 = new TimetableGen(5, 3);
+		gen.setChromosome(new ArrayList<Integer>(0));
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(gen, gen1, 0.5);
+		});
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(gen1, gen, 0.5);
+		});
+	}
+
+	@Test
+	public void secondConstructorMutationRateShouldBeBetweenZeroAndOne() {
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(gen, gen, -1);
+		});
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(gen, gen, 2);
+		});
+	}
+	
+	@Test
+	public void secondConstructorParametersShouldHaveTheSamePositiveHourCount() {
+		TimetableGen gen1 = new TimetableGen(5, 2);
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(gen, gen1, 0.5);
+		});
+		gen.setHourCount(-10);
+		gen1.setHourCount(-10);
+		assertThrows(InvalidParameterException.class, () -> {
+			new TimetableGen(gen, gen1, 0.5);
+		});
+	}
+	
+	@Test
+	public void createdChildShouldNotBeNull() {
+		TimetableGen gen1 = new TimetableGen(gen, gen, 0.3);
+		assertNotNull(gen1);
+		assertNotNull(gen1.getChromosome());
+	}
+	
+	@Test
+	public void createdChildChromosomeShouldNotBeSizedZero() {
+		assertNotEquals(0, new TimetableGen(gen, gen, 0.3).chromosome.size());
+	}
+	
+	@Test 
+	public void createdChildShouldHaveProperHourCount() {
+		TimetableGen gen1 = new TimetableGen(gen, gen, 0.3);
+		assertTrue(gen1.getHourCount()>0);
+		assertTrue(gen1.getChromosome().size()>=gen1.getHourCount());
+	}
 }

@@ -37,11 +37,7 @@ public abstract class Genotype<T> {
 
 		if (mutationRate < 0 || mutationRate > 1)
 			throw new InvalidParameterException("Invalid mutationRate");
-
-		ArrayList<T> chrom = crossover(firstParent.chromosome, secondParent.chromosome);
-		chrom = mutateChromosome(chrom, mutationRate);
-		if (!isValid(chrom))
-			this.chromosome = repairChromosome(chrom);
+		this.chromosome = null;
 	}
 
 	public ArrayList<T> getChromosome() {
