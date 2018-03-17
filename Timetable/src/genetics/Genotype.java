@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public abstract class Genotype<T> {
 
-	private ArrayList<T> chromosome;
-	private int chromosomeSize;
+	// TODO czy powinien byc private?
+	protected ArrayList<T> chromosome;
 
 	protected abstract ArrayList<T> createRandomChromosome(int chromosomeSize);
 
@@ -19,10 +19,9 @@ public abstract class Genotype<T> {
 	protected abstract ArrayList<T> mutateChromosome(ArrayList<T> chromosome, double mutationRate);
 
 	public Genotype(int chromosomeSize) throws InvalidParameterException {
-		if (chromosomeSize > 0)
-			this.setChromosomeSize(chromosomeSize);
-		else
-			throw new InvalidParameterException("ChromosomeSize less or equal to zero");
+
+		if (chromosomeSize <= 0)
+			throw new InvalidParameterException("Invalid chromosomeSize");
 
 		ArrayList<T> chrom = createRandomChromosome(chromosomeSize);
 		if (!isValid(chrom))
@@ -30,29 +29,21 @@ public abstract class Genotype<T> {
 														// penalty points
 	}
 
-	public Genotype(ArrayList<T> firstParent, ArrayList<T> secondParent, double mutationRate)
+	public Genotype(Genotype<T> firstParent, Genotype<T> secondParent, double mutationRate)
 			throws InvalidParameterException {
-		int size = firstParent.size();
-		if (secondParent.size() == size && size > 0)
-			this.chromosomeSize = size;
-		else
-			throw new InvalidParameterException("Invalid parent's ChromosomeSize");
+
+		if (firstParent == null || secondParent == null || firstParent.chromosome == null
+				|| secondParent.chromosome == null || firstParent.chromosome.size() == 0
+				|| secondParent.chromosome.size() == 0)
+			throw new InvalidParameterException("Invalid parent's chromosomes");
 
 		if (mutationRate < 0 || mutationRate > 1)
 			throw new InvalidParameterException("Invalid mutationRate");
 
-		ArrayList<T> chrom = crossover(firstParent, secondParent);
+		ArrayList<T> chrom = crossover(firstParent.chromosome, secondParent.chromosome);
 		chrom = mutateChromosome(chrom, mutationRate);
 		if (!isValid(chrom))
 			this.chromosome = repairChromosome(chrom);
-	}
-
-	public int getChromosomeSize() {
-		return chromosomeSize;
-	}
-
-	public void setChromosomeSize(int chromosomeSize) {
-		this.chromosomeSize = chromosomeSize;
 	}
 
 	public ArrayList<T> getChromosome() {
