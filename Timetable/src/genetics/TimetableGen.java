@@ -25,7 +25,7 @@ public class TimetableGen extends Genotype<Integer> {
 		if (count != secondParent.hourCount || count < 0)
 			throw new InvalidParameterException("Invalid hourCount");
 	}
-//sanckank
+
 	@Override
 	protected ArrayList<Integer> createRandomChromosome(int chromosomeSize) {
 
@@ -34,17 +34,15 @@ public class TimetableGen extends Genotype<Integer> {
 			chrom.add(i);
 		for (int i = hourCount + 1; i <= chromosomeSize; i++)
 			chrom.add(0); // empty slots in chromosome
-
-		Random generator = new Random(); // randomizer: Fisher-Yates shuffle
-		for (int i = chromosomeSize - 1; i >= 1; i--)
-			Collections.swap(chrom, generator.nextInt(i + 1), i);
+		
+		Collections.shuffle(chrom, new Random());
 		return chrom;
 	}
 
 	@Override
 	protected boolean isValid(ArrayList<Integer> chromosome) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
