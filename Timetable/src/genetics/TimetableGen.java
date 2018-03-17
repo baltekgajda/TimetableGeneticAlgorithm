@@ -15,6 +15,12 @@ public class TimetableGen extends Genotype<Integer> {
 		super(chromosomeSize);
 		if (hourCount < 0 || hourCount > chromosomeSize)
 			throw new InvalidParameterException("Invalid hourCount");
+
+		this.hourCount = hourCount;
+		ArrayList<Integer> chrom = createRandomChromosome(chromosomeSize);
+		if (!isValid(chrom))
+			this.chromosome = repairChromosome(chrom); // if chromosome is not valid
+														// after repair there will be penalty points
 	}
 
 	public TimetableGen(TimetableGen firstParent, TimetableGen secondParent, double mutationRate)
@@ -34,7 +40,6 @@ public class TimetableGen extends Genotype<Integer> {
 			chrom.add(i);
 		for (int i = hourCount + 1; i <= chromosomeSize; i++)
 			chrom.add(0); // empty slots in chromosome
-		
 		Collections.shuffle(chrom, new Random());
 		return chrom;
 	}
@@ -42,13 +47,13 @@ public class TimetableGen extends Genotype<Integer> {
 	@Override
 	protected boolean isValid(ArrayList<Integer> chromosome) {
 		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 
 	@Override
 	protected ArrayList<Integer> repairChromosome(ArrayList<Integer> chromosome) {
 		// TODO Auto-generated method stub
-		return null;
+		return chromosome;
 	}
 
 	@Override
@@ -63,4 +68,22 @@ public class TimetableGen extends Genotype<Integer> {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		String string = new String("[");
+		for (int i = 0; i < chromosome.size() - 1; i++) {
+			string += chromosome.get(i);
+			string += ", ";
+		}
+		string = string + chromosome.get(chromosome.size() - 1) + "]";
+		return string;
+	}
+
+	public int getHourCount() {
+		return hourCount;
+	}
+
+	public void setHourCount(int hourCount) {
+		this.hourCount = hourCount;
+	}
 }

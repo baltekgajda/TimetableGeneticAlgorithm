@@ -18,15 +18,13 @@ public abstract class Genotype<T> {
 
 	protected abstract ArrayList<T> mutateChromosome(ArrayList<T> chromosome, double mutationRate);
 
+	public abstract String toString();
+
 	public Genotype(int chromosomeSize) throws InvalidParameterException {
 
 		if (chromosomeSize <= 0)
 			throw new InvalidParameterException("Invalid chromosomeSize");
-
-		ArrayList<T> chrom = createRandomChromosome(chromosomeSize);
-		if (!isValid(chrom))
-			this.chromosome = repairChromosome(chrom); // if chromosome is not valid after repair there will be a
-														// penalty points
+		this.chromosome = null;
 	}
 
 	public Genotype(Genotype<T> firstParent, Genotype<T> secondParent, double mutationRate)

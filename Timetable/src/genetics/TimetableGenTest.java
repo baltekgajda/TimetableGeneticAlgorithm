@@ -12,8 +12,11 @@ import org.junit.jupiter.api.Test;
 
 public class TimetableGenTest {
 
+	private TimetableGen gen;
+
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
+		gen = new TimetableGen(5, 3);
 	}
 
 	@Test
@@ -28,45 +31,23 @@ public class TimetableGenTest {
 			new TimetableGen(-5, 57);
 		});
 	}
-	
+
 	@Test
-	public void createdChromosomeShouldHaveProperSize() {
-		TimetableGen gen = new TimetableGen(5, 3);
+	public void firstConstructorShouldInitializeHourCount() {
+		assertEquals(3, gen.getHourCount());
+	}
+
+	@Test
+	public void randomCreatedChromosomeShouldHaveProperSize() {
 		assertNotNull(gen.getChromosome());
 		assertEquals(5, gen.getChromosome().size());
 	}
 
 	@Test
-	void createdChromosomeShouldHaveProperHourCount() {
-		TimetableGen gen = new TimetableGen(5, 3);
+	void randomCreatedChromosomeShouldHaveProperArrayList() {
 		assertNotNull(gen.getChromosome());
 		Collections.sort(gen.getChromosome());
-		assertEquals(new ArrayList<Integer>(Arrays.asList(0,0,1,2,3)), gen.getChromosome());
-	}
-
-	@Test
-	void testCreateRandomChromosomeInt() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	void testIsValidArrayListOfInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	void testRepairChromosomeArrayListOfInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	void testCrossoverArrayListOfIntegerArrayListOfInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	void testMutateChromosomeArrayListOfIntegerDouble() {
-		fail("Not yet implemented"); // TODO
+		assertEquals(new ArrayList<Integer>(Arrays.asList(0, 0, 1, 2, 3)), gen.getChromosome());
 	}
 
 }
